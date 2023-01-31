@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">MyProductsApp</string>
+    <string name="product_name">Product Name</string>
+    <string name="price">Price</string>
+    <string name="image_desc">Product Image</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="listButton">Product List</string>
+    <string name="favsButton">Favorites</string>
+    <string name="exitButton">Exit</string>
+</resources>
