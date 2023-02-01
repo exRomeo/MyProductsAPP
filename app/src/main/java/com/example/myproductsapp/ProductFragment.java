@@ -78,7 +78,7 @@ public class ProductFragment extends Fragment implements ProductView {
     }
 
     @Override
-    public void onResponseFailure(String msg) {
+    public void showError(String msg) {
         Snackbar.make(rcView,msg,Snackbar.LENGTH_SHORT).show();
     }
 

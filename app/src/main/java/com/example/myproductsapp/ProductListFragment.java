@@ -72,7 +72,7 @@ public class ProductListFragment extends Fragment implements ProductView, OnProd
     }
 
     @Override
-    public void onResponseFailure(String msg) {
+    public void showError(String msg) {
         Snackbar.make(recyclerView, msg, Snackbar.LENGTH_SHORT).show();
     }
 

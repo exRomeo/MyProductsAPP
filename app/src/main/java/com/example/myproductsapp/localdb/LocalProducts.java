@@ -4,15 +4,17 @@ import android.content.Context;
 
 import androidx.lifecycle.LiveData;
 
+import com.example.myproductsapp.Repository;
+
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class LocalProducts {
+public class LocalProducts implements Repository {
     private static LocalProducts productsRepo;
     private final ProductDAO productDAO;
     private final LiveData<List<Product>> storedProducts;
-        private List<Product> products;
+    private List<Product> products;
 
     Context context;
 
@@ -28,20 +30,27 @@ public class LocalProducts {
         return productsRepo;
     }
 
+    @Override
     public LiveData<List<Product>> getProducts() {
         return storedProducts;
     }
 
+    @Override
     public void setProducts(ArrayList<Product> products) {
         this.products = products;
     }
-    public List<Product> getAllProducts(){
+
+    @Override
+    public List<Product> getAllProducts() {
         return products;
     }
+
+    @Override
     public void addProduct(Product product) {
         new Thread(() -> productDAO.insertProduct(product)).start();
     }
 
+    @Override
     public void removeProduct(Product product) {
         new Thread(() -> productDAO.deleteProduct(product)).start();
     }

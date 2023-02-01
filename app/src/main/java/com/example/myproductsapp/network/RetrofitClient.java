@@ -4,8 +4,6 @@ import androidx.annotation.NonNull;
 
 import com.example.myproductsapp.ProductView;
 import com.example.myproductsapp.localdb.Product;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,8 +21,13 @@ public class RetrofitClient {
     private List<Product> productsList;
     private ServerCalls serverCalls;
     private ProductView productView;
-    private RetrofitClient(ProductView productView) {
 
+    private RetrofitClient(ProductView productView) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(ServerCalls.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        serverCalls = retrofit.create(ServerCalls.class);
         this.productView = productView;
     }
 
@@ -36,16 +39,8 @@ public class RetrofitClient {
 
 
     public void startCall() {
-        Gson gson = new GsonBuilder().create();
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(ServerCalls.BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .build();
-
-        serverCalls = retrofit.create(ServerCalls.class);
 
         Call<ProductModel> products = serverCalls.getAllProducts();
-
         Callback<ProductModel> mProducts = new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<ProductModel> call, Response<ProductModel> response) {
@@ -54,27 +49,18 @@ public class RetrofitClient {
                     productView.showProducts(productsList);
                 }
             }
+
             @Override
             public void onFailure(@NonNull Call<ProductModel> call, Throwable e) {
                 e.printStackTrace();
-                productView.onResponseFailure(e.getMessage());
+                productView.showError(e.getMessage());
             }
         };
         products.enqueue(mProducts);
     }
 
     public void startCall(int id) {
-        Gson gson = new GsonBuilder().create();
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(ServerCalls.BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .build();
-
-        serverCalls = retrofit.create(ServerCalls.class);
-
         Call<Product> product = serverCalls.getProduct(id);
-
         Callback<Product> mProduct = new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<Product> call, Response<Product> response) {
@@ -88,7 +74,7 @@ public class RetrofitClient {
             @Override
             public void onFailure(@NonNull Call<Product> call, Throwable e) {
                 e.printStackTrace();
-                productView.onResponseFailure(e.getMessage());
+                productView.showError(e.getMessage());
             }
         };
         product.enqueue(mProduct);

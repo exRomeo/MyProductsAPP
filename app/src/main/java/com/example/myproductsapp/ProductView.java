@@ -8,7 +8,8 @@ public interface ProductView {
 
     void showProducts(List<Product> products);
 
-    void onResponseFailure(String msg);
+    void showError(String msg);
+
 
     void addToFavorites(Product product);
 
