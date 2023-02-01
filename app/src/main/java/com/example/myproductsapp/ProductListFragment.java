@@ -26,7 +26,7 @@ import java.util.List;
 public class ProductListFragment extends Fragment implements ProductView, OnProductClickListener {
     private RecyclerView recyclerView;
     private ArrayList<Product> products;
-    private LocalProducts localProducts;
+    private Repository repository;
     private ProductAdapter productAdapter;
     private RecyclerView.LayoutManager layoutManager;
     private ProductPresenter presenter;
@@ -55,7 +55,7 @@ public class ProductListFragment extends Fragment implements ProductView, OnProd
         super.onViewCreated(view, savedInstanceState);
         Log.i("TAG", "onViewCreated: <<<<<<<<<<<<<<<<");
         recyclerView = view.findViewById(R.id.rc_view);
-        localProducts = LocalProducts.getInstance(this.requireContext());
+        repository = LocalProducts.getInstance(this.requireContext());
         layoutManager = new LinearLayoutManager(this.requireContext());
         productAdapter = new ProductAdapter(this.requireContext(), new ArrayList<>(), this);
         recyclerView.setLayoutManager(layoutManager);
@@ -78,14 +78,14 @@ public class ProductListFragment extends Fragment implements ProductView, OnProd
 
     @Override
     public void onClick(Product product) {
-//        localProducts.addProduct(product);
-        addToFavorites(product);
+        repository.addProduct(product);
+//        addToFavorites(product);
         Toast.makeText(this.requireContext(), product.getTitle() + "\nadded to favs", Toast.LENGTH_SHORT).show();
     }
 
 
     @Override
     public void addToFavorites(Product product) {
-        localProducts.addProduct(product);
+        repository.addProduct(product);
     }
 }
