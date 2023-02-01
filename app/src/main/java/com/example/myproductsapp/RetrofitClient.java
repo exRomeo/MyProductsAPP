@@ -35,11 +35,11 @@ NetworkDelegate networkDelegate;
 
         serverCalls = retrofit.create(ServerCalls.class);
 
-        Call<ProductsModel> products = serverCalls.getAllProducts();
+        Call<ProductsRepo> products = serverCalls.getAllProducts();
 
-        Callback<ProductsModel> mProducts = new Callback<>() {
+        Callback<ProductsRepo> mProducts = new Callback<>() {
             @Override
-            public void onResponse(@NonNull Call<ProductsModel> call, Response<ProductsModel> response) {
+            public void onResponse(@NonNull Call<ProductsRepo> call, Response<ProductsRepo> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     productsList = response.body().getAllProducts();
                     networkDelegate.onResponseSuccess(productsList);
@@ -47,7 +47,7 @@ NetworkDelegate networkDelegate;
             }
 
             @Override
-            public void onFailure(@NonNull Call<ProductsModel> call, Throwable e) {
+            public void onFailure(@NonNull Call<ProductsRepo> call, Throwable e) {
                 e.printStackTrace();
                 networkDelegate.onResponseFailure(e.getMessage());
             }

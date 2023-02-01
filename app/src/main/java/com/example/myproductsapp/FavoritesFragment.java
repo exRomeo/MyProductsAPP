@@ -18,7 +18,7 @@ public class FavoritesFragment extends Fragment implements OnProductClickListene
     private RecyclerView recyclerView;
     private FavsAdapter favsAdapter;
     private RecyclerView.LayoutManager layoutManager;
-    private ProductsModel products;
+    private ProductsRepo products;
 
     public FavoritesFragment() {
         // Required empty public constructor
@@ -43,7 +43,7 @@ public class FavoritesFragment extends Fragment implements OnProductClickListene
         recyclerView = view.findViewById(R.id.favsList);
         favsAdapter = new FavsAdapter(this.getContext(),new ArrayList<>(),this);
         layoutManager = new LinearLayoutManager(this.getContext());
-        products = ProductsModel.getInstance(this.getContext());
+        products = ProductsRepo.getInstance(this.getContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(favsAdapter);
         products.getProducts().observe(this.requireActivity(), products -> {

@@ -26,33 +26,25 @@ public class ProductActivity extends AppCompatActivity {
         }
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        if (savedInstanceState == null) {
-            switch (dest) {
-                case 1:
-                    productListFragment = new ProductListFragment();
-                    fragmentTransaction.add(R.id.fragmentContainerView, productListFragment, "list");
-                    break;
-                case 2:
-                    favoritesFragment = new FavoritesFragment();
-                    fragmentTransaction.add(R.id.fragmentContainerView, favoritesFragment, "favorites");
-                    break;
-                case 3:
-                    productFragment = new ProductFragment();
-                    fragmentTransaction.add(R.id.fragmentContainerView, productFragment, "product");
+        switch (dest) {
+            case 1:
+                productListFragment = new ProductListFragment();
+                fragmentTransaction.add(R.id.fragmentContainerView, productListFragment, "list");
+                break;
+            case 2:
+                favoritesFragment = new FavoritesFragment();
+                fragmentTransaction.add(R.id.fragmentContainerView, favoritesFragment, "favorites");
+                break;
+            case 3:
+                productFragment = new ProductFragment();
+                fragmentTransaction.add(R.id.fragmentContainerView, productFragment, "product");
 //                  fragmentTransaction.replace(R.id.fragmentContainerView, productFragment);
-                    break;
-                default:
-                    finish();
-                    break;
-            }
-        } else {
-            if (favoritesFragment != null)
-                favoritesFragment = (FavoritesFragment) getSupportFragmentManager().getFragment(savedInstanceState, "favoritesFragment");
-            if (productListFragment != null)
-                productListFragment = (ProductListFragment) getSupportFragmentManager().getFragment(savedInstanceState, "listFragment");
-            if (productFragment != null)
-                productFragment = (ProductFragment) getSupportFragmentManager().getFragment(savedInstanceState, "productFragment");
+                break;
+            default:
+                finish();
+                break;
         }
+
         fragmentTransaction.commit();
     }
 
@@ -64,11 +56,6 @@ public class ProductActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        if (favoritesFragment != null)
-            getSupportFragmentManager().putFragment(outState, "favoritesFragment", favoritesFragment);
-        if (productListFragment != null)
-            getSupportFragmentManager().putFragment(outState, "listFragment", productListFragment);
-        if (productFragment != null)
-            getSupportFragmentManager().putFragment(outState, "productFragment",productFragment);
+
     }
 }

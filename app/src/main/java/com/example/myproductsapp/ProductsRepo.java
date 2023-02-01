@@ -8,24 +8,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class ProductsModel {
-    private static ProductsModel productsModel;
+public class ProductsRepo {
+    private static ProductsRepo productsRepo;
     private final ProductDAO productDAO;
     private final LiveData<List<Product>> storedProducts;
         private List<Product> products;
 
     Context context;
 
-    private ProductsModel(Context context) {
+    private ProductsRepo(Context context) {
         this.context = context;
         ProductsDatabase pDB = ProductsDatabase.getInstance(context);
         productDAO = pDB.productDAO();
         storedProducts = productDAO.getAllProducts();
     }
 
-    public static ProductsModel getInstance(Context context) {
-        if (productsModel == null) productsModel = new ProductsModel(context);
-        return productsModel;
+    public static ProductsRepo getInstance(Context context) {
+        if (productsRepo == null) productsRepo = new ProductsRepo(context);
+        return productsRepo;
     }
 
     public LiveData<List<Product>> getProducts() {

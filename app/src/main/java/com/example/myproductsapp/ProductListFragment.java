@@ -22,7 +22,7 @@ import java.util.List;
 public class ProductListFragment extends Fragment implements NetworkDelegate, OnProductClickListener {
     private RecyclerView recyclerView;
     private ArrayList<Product> products;
-    private ProductsModel productsModel;
+    private ProductsRepo productsRepo;
     private ProductAdapter productAdapter;
     private RecyclerView.LayoutManager layoutManager;
     private ImageView holder;
@@ -49,9 +49,9 @@ public class ProductListFragment extends Fragment implements NetworkDelegate, On
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         recyclerView = view.findViewById(R.id.rc_view);
-        productsModel = ProductsModel.getInstance(this.getContext());
-        layoutManager = new LinearLayoutManager(this.getContext());
-        productAdapter = new ProductAdapter(this.getContext(), new ArrayList<>(), this);
+        productsRepo = ProductsRepo.getInstance(this.requireContext());
+        layoutManager = new LinearLayoutManager(this.requireContext());
+        productAdapter = new ProductAdapter(this.requireContext(), new ArrayList<>(), this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(productAdapter);
         RetrofitClient retroFitClient = new RetrofitClient(this);
@@ -72,7 +72,7 @@ public class ProductListFragment extends Fragment implements NetworkDelegate, On
 
     @Override
     public void onClick(Product product) {
-        productsModel.addProduct(product);
-        Toast.makeText(this.getContext(), product.getTitle() + "\nadded to favs", Toast.LENGTH_SHORT).show();
+        productsRepo.addProduct(product);
+        Toast.makeText(this.requireContext(), product.getTitle() + "\nadded to favs", Toast.LENGTH_SHORT).show();
     }
 }
