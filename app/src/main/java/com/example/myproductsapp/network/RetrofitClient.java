@@ -1,7 +1,9 @@
-package com.example.myproductsapp;
+package com.example.myproductsapp.network;
 
 import androidx.annotation.NonNull;
 
+import com.example.myproductsapp.ProductView;
+import com.example.myproductsapp.localdb.Product;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -15,51 +17,57 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
+
+    private static RetrofitClient retrofitClient;
+    List<Product> listOfOne;
     private List<Product> productsList;
     private ServerCalls serverCalls;
-    private static final String BASE_URL = "https://dummyjson.com/";
+    private ProductView productView;
+    private RetrofitClient(ProductView productView) {
 
-
-NetworkDelegate networkDelegate;
-    public RetrofitClient(NetworkDelegate networkDelegate) {
-
-        this.networkDelegate =networkDelegate;
+        this.productView = productView;
     }
 
-    void startCall() {
+    public static synchronized RetrofitClient getInstance(ProductView productView) {
+        if (retrofitClient == null)
+            retrofitClient = new RetrofitClient(productView);
+        return retrofitClient;
+    }
+
+
+    public void startCall() {
         Gson gson = new GsonBuilder().create();
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BASE_URL)
+                .baseUrl(ServerCalls.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
 
         serverCalls = retrofit.create(ServerCalls.class);
 
-        Call<ProductsRepo> products = serverCalls.getAllProducts();
+        Call<ProductModel> products = serverCalls.getAllProducts();
 
-        Callback<ProductsRepo> mProducts = new Callback<>() {
+        Callback<ProductModel> mProducts = new Callback<>() {
             @Override
-            public void onResponse(@NonNull Call<ProductsRepo> call, Response<ProductsRepo> response) {
+            public void onResponse(@NonNull Call<ProductModel> call, Response<ProductModel> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    productsList = response.body().getAllProducts();
-                    networkDelegate.onResponseSuccess(productsList);
+                    productsList = response.body().getProducts();
+                    productView.showProducts(productsList);
                 }
             }
-
             @Override
-            public void onFailure(@NonNull Call<ProductsRepo> call, Throwable e) {
+            public void onFailure(@NonNull Call<ProductModel> call, Throwable e) {
                 e.printStackTrace();
-                networkDelegate.onResponseFailure(e.getMessage());
+                productView.onResponseFailure(e.getMessage());
             }
         };
         products.enqueue(mProducts);
     }
 
-    void startCall(int id) {
+    public void startCall(int id) {
         Gson gson = new GsonBuilder().create();
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BASE_URL)
+                .baseUrl(ServerCalls.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
 
@@ -71,16 +79,16 @@ NetworkDelegate networkDelegate;
             @Override
             public void onResponse(@NonNull Call<Product> call, Response<Product> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    ArrayList<Product> listOfOne = new ArrayList<>();
+                    listOfOne = new ArrayList<>();
                     listOfOne.add(response.body());
-                    networkDelegate.onResponseSuccess(listOfOne);
+                    productView.showProducts(listOfOne);
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<Product> call, Throwable e) {
                 e.printStackTrace();
-                networkDelegate.onResponseFailure(e.getMessage());
+                productView.onResponseFailure(e.getMessage());
             }
         };
         product.enqueue(mProduct);

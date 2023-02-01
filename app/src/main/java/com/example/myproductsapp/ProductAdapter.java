@@ -15,8 +15,8 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.myproductsapp.localdb.Product;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHolder> {
@@ -26,7 +26,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
     private final OnProductClickListener onProductClickListener;
 
 
-    public ProductAdapter(@NonNull Context context, @Nullable ArrayList<Product> products, OnProductClickListener onProductClickListener) {
+    public ProductAdapter(@NonNull Context context, @Nullable List<Product> products, OnProductClickListener onProductClickListener) {
         this.context = context;
         this.products = products;
         this.onProductClickListener = onProductClickListener;

@@ -1,11 +1,13 @@
-package com.example.myproductsapp;
+package com.example.myproductsapp.localdb;
 
 import android.icu.text.NumberFormat;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+import java.util.List;
 import java.util.Locale;
 @Entity(tableName = "products")
 public class Product {
@@ -23,7 +25,8 @@ public class Product {
     private String brand;
     private String category;
     private String thumbnail;
-
+    @Ignore
+    private List<String> images;
 
     public Product(int id, String title, String description, int price, float discountPercentage, float rating, int stock, String brand, String category, String thumbnail) {
         this.id = id;
@@ -103,6 +106,14 @@ public class Product {
 
     public void setDiscountPercentage(float discountPercentage) {
         this.discountPercentage = discountPercentage;
+    }
+
+    public List<String> getImages() {
+        return images;
+    }
+
+    public void setImages(List<String> images) {
+        this.images = images;
     }
 
 

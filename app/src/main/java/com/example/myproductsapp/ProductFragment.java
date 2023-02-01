@@ -1,6 +1,7 @@
 package com.example.myproductsapp;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,11 +15,13 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.myproductsapp.localdb.Product;
+import com.example.myproductsapp.network.RetrofitClient;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 
-public class ProductFragment extends Fragment implements NetworkDelegate{
+public class ProductFragment extends Fragment implements ProductView {
 
     private int productId;
     private Product product;
@@ -57,9 +60,8 @@ public class ProductFragment extends Fragment implements NetworkDelegate{
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getUiRefs(view);
-        RetrofitClient retrofitClient = new RetrofitClient(this);
+        RetrofitClient retrofitClient = /*new RetrofitClient(this)*/RetrofitClient.getInstance(this);
         retrofitClient.startCall(productId);
-
     }
 
     @Override
@@ -69,7 +71,8 @@ public class ProductFragment extends Fragment implements NetworkDelegate{
     }
 
     @Override
-    public void onResponseSuccess(List<Product> productList) {
+    public void showProducts(List<Product> productList) {
+        Log.i("TAG", "showProducts: one product shower");
         product = productList.get(0);
         updateUI();
     }
@@ -78,6 +81,12 @@ public class ProductFragment extends Fragment implements NetworkDelegate{
     public void onResponseFailure(String msg) {
         Snackbar.make(rcView,msg,Snackbar.LENGTH_SHORT).show();
     }
+
+    @Override
+    public void addToFavorites(Product product) {
+
+    }
+
     private void updateUI(){
         titleText.setText(product.getTitle());
         brandText.setText(product.getBrand());

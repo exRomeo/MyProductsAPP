@@ -1,4 +1,4 @@
-package com.example.myproductsapp;
+package com.example.myproductsapp.localdb;
 
 import android.content.Context;
 
@@ -8,23 +8,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class ProductsRepo {
-    private static ProductsRepo productsRepo;
+public class LocalProducts {
+    private static LocalProducts productsRepo;
     private final ProductDAO productDAO;
     private final LiveData<List<Product>> storedProducts;
         private List<Product> products;
 
     Context context;
 
-    private ProductsRepo(Context context) {
+    private LocalProducts(Context context) {
         this.context = context;
         ProductsDatabase pDB = ProductsDatabase.getInstance(context);
         productDAO = pDB.productDAO();
         storedProducts = productDAO.getAllProducts();
     }
 
-    public static ProductsRepo getInstance(Context context) {
-        if (productsRepo == null) productsRepo = new ProductsRepo(context);
+    public static LocalProducts getInstance(Context context) {
+        if (productsRepo == null) productsRepo = new LocalProducts(context);
         return productsRepo;
     }
 

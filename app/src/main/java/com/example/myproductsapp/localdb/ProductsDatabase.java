@@ -1,4 +1,4 @@
-package com.example.myproductsapp;
+package com.example.myproductsapp.localdb;
 
 import android.content.Context;
 
