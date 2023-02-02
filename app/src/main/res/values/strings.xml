@@ -7,4 +7,10 @@
     <string name="listButton">Product List</string>
     <string name="favsButton">Favorites</string>
     <string name="exitButton">Exit</string>
+    <string name="img_desc">Product Image</string>
+    <string name="description">description</string>
+    <string name="title_holder">Title</string>
+    <string name="price_holder">price</string>
+    <string name="brand_holder">Brand</string>
+    <string name="addButton">add</string>
 </resources>
