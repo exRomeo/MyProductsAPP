@@ -1,16 +1,14 @@
 <resources>
     <string name="app_name">MyProductsApp</string>
     <string name="product_name">Product Name</string>
-    <string name="price">Price</string>
     <string name="image_desc">Product Image</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="listButton">Product List</string>
     <string name="favsButton">Favorites</string>
     <string name="exitButton">Exit</string>
     <string name="img_desc">Product Image</string>
-    <string name="description">description</string>
+    <string name="description">Description</string>
     <string name="title_holder">Title</string>
-    <string name="price_holder">price</string>
+    <string name="price_holder">Price</string>
     <string name="brand_holder">Brand</string>
-    <string name="addButton">add</string>
+    <string name="addButton">Add</string>
 </resources>
