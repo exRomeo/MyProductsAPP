@@ -1,7 +1,8 @@
-package com.example.myproductsapp;
+package com.example.myproductsapp.productviews;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,19 +15,22 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.myproductsapp.localdb.Product;
+import com.example.myproductsapp.R;
+import com.example.myproductsapp.model.Product;
 
 import java.util.List;
 
-public class FavsAdapter extends RecyclerView.Adapter<FavsAdapter.ViewHolder> {
+public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHolder> {
     private final Context context;
     private List<Product> products;
     private final OnProductClickListener onProductClickListener;
+    Drawable icon;
 
-    public FavsAdapter(Context context, List<Product> products, OnProductClickListener onProductClickListener) {
+    public ProductAdapter(Context context, List<Product> products, OnProductClickListener onProductClickListener, Drawable icon) {
         this.context = context;
         this.products = products;
         this.onProductClickListener = onProductClickListener;
+        this.icon = icon;
     }
 
     @NonNull
@@ -52,10 +56,8 @@ public class FavsAdapter extends RecyclerView.Adapter<FavsAdapter.ViewHolder> {
             toProduct.putExtra("product", currentProduct.getId());
             context.startActivity(toProduct);
         });
-        holder.getCardView().findViewById(R.id.favButton).setBackground(context.getResources().getDrawable(R.drawable.baseline_delete_forever_24));
-        holder.getCardView().findViewById(R.id.favButton).setOnClickListener(v -> {
-            onProductClickListener.onClick(currentProduct);
-        });
+        holder.getCardView().findViewById(R.id.favButton).setBackground(icon);
+        holder.getCardView().findViewById(R.id.favButton).setOnClickListener(v -> onProductClickListener.onClick(currentProduct));
 
 
     }

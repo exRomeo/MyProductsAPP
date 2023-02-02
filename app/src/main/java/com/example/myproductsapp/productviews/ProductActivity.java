@@ -1,4 +1,4 @@
-package com.example.myproductsapp;
+package com.example.myproductsapp.productviews;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,12 +8,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.myproductsapp.R;
+
 public class ProductActivity extends AppCompatActivity {
     private int productID;
     private int dest;
-    private FavoritesFragment favoritesFragment;
-    private ProductListFragment productListFragment;
-    private ProductFragment productFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,17 +27,16 @@ public class ProductActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         switch (dest) {
             case 1:
-                productListFragment = new ProductListFragment();
+                ProductListFragment productListFragment = new ProductListFragment();
                 fragmentTransaction.add(R.id.fragmentContainerView, productListFragment, "list");
                 break;
             case 2:
-                favoritesFragment = new FavoritesFragment();
+                FavoritesFragment favoritesFragment = new FavoritesFragment();
                 fragmentTransaction.add(R.id.fragmentContainerView, favoritesFragment, "favorites");
                 break;
             case 3:
-                productFragment = new ProductFragment();
+                ProductFragment productFragment = new ProductFragment();
                 fragmentTransaction.add(R.id.fragmentContainerView, productFragment, "product");
-//                  fragmentTransaction.replace(R.id.fragmentContainerView, productFragment);
                 break;
             default:
                 finish();

@@ -1,6 +1,7 @@
 package com.example.myproductsapp.network;
 
-import com.example.myproductsapp.localdb.Product;
+import com.example.myproductsapp.model.Product;
+import com.example.myproductsapp.model.ProductModel;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

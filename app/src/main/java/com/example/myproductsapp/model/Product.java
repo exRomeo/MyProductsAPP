@@ -1,4 +1,4 @@
-package com.example.myproductsapp.localdb;
+package com.example.myproductsapp.model;
 
 import android.icu.text.NumberFormat;
 
@@ -13,20 +13,20 @@ import java.util.Locale;
 public class Product {
     @PrimaryKey
     @ColumnInfo
-    private int id;
+    private final int id;
 
-    private String title;
+    private final String title;
 
-    private String description;
-    private int price;
-    private float discountPercentage;
-    private float rating;
-    private int stock;
-    private String brand;
-    private String category;
-    private String thumbnail;
+    private final String description;
+    private  final int price;
+    private  final float discountPercentage;
+    private  final float rating;
+    private  final int stock;
+    private  final String brand;
+    private  final String category;
+    private  final String thumbnail;
     @Ignore
-    private List<String> images;
+    private  List<String> images;
 
     public Product(int id, String title, String description, int price, float discountPercentage, float rating, int stock, String brand, String category, String thumbnail) {
         this.id = id;
@@ -39,9 +39,7 @@ public class Product {
         this.brand = brand;
         this.category = category;
         this.thumbnail = thumbnail;
-
     }
-
     public int getId() {
         return id;
     }
@@ -88,52 +86,7 @@ public class Product {
         return thumbnail;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setPrice(int price) {
-        this.price = price;
-    }
-
-    public void setDiscountPercentage(float discountPercentage) {
-        this.discountPercentage = discountPercentage;
-    }
-
     public List<String> getImages() {
         return images;
-    }
-
-    public void setImages(List<String> images) {
-        this.images = images;
-    }
-
-
-    public void setRating(float rating) {
-        this.rating = rating;
-    }
-
-    public void setStock(int stock) {
-        this.stock = stock;
-    }
-
-    public void setBrand(String brand) {
-        this.brand = brand;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
-    public void setThumbnail(String thumbnail) {
-        this.thumbnail = thumbnail;
     }
 }

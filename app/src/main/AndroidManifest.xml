@@ -12,7 +12,7 @@
         android:theme="@style/Theme.MyProductsApp"
         tools:targetApi="31">
         <activity
-            android:name=".ProductActivity"
+            android:name=".productviews.ProductActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

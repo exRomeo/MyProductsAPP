@@ -1,18 +1,19 @@
-package com.example.myproductsapp;
+package com.example.myproductsapp.model;
 
 import androidx.lifecycle.LiveData;
 
-import com.example.myproductsapp.localdb.Product;
+import com.example.myproductsapp.network.NetworkDelegate;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public interface Repository {
+public interface RepositoryInterface {
     LiveData<List<Product>> getProducts();
+     void getProduct(NetworkDelegate networkDelegate, int id);
 
     void setProducts(ArrayList<Product> products);
 
-    List<Product> getAllProducts();
+    void getAllProducts(NetworkDelegate networkDelegate);
 
     void addProduct(Product product);
 

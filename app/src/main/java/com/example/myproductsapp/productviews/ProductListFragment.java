@@ -1,7 +1,6 @@
-package com.example.myproductsapp;
+package com.example.myproductsapp.productviews;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,27 +9,29 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.myproductsapp.localdb.LocalProducts;
-import com.example.myproductsapp.localdb.Product;
+import com.example.myproductsapp.presenter.Presenter;
+import com.example.myproductsapp.presenter.PresenterInterface;
+import com.example.myproductsapp.R;
+import com.example.myproductsapp.localdb.LocalSource;
+import com.example.myproductsapp.model.Product;
 import com.example.myproductsapp.network.RetrofitClient;
+import com.example.myproductsapp.model.Repository;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class ProductListFragment extends Fragment implements ProductView, OnProductClickListener {
+public class ProductListFragment extends Fragment implements ProductViewInterface, OnProductClickListener {
     private RecyclerView recyclerView;
-    private ArrayList<Product> products;
-    private Repository repository;
-    private ProductAdapter productAdapter;
-    private RecyclerView.LayoutManager layoutManager;
-    private ProductPresenter presenter;
     private ImageView holder;
+    private ProductAdapter productAdapter;
+    private PresenterInterface presenter;
 
     public ProductListFragment() {
         // Required empty public constructor
@@ -53,15 +54,12 @@ public class ProductListFragment extends Fragment implements ProductView, OnProd
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Log.i("TAG", "onViewCreated: <<<<<<<<<<<<<<<<");
         recyclerView = view.findViewById(R.id.rc_view);
-        repository = LocalProducts.getInstance(this.requireContext());
-        layoutManager = new LinearLayoutManager(this.requireContext());
-        productAdapter = new ProductAdapter(this.requireContext(), new ArrayList<>(), this);
-        recyclerView.setLayoutManager(layoutManager);
+        productAdapter = new ProductAdapter(this.requireContext(), new ArrayList<>(), this, ContextCompat.getDrawable(this.requireContext(),R.drawable.heart));
+        presenter = new Presenter(this, Repository.getInstance(RetrofitClient.getInstance(), LocalSource.getInstance(this.requireContext())));
+        recyclerView.setLayoutManager(new LinearLayoutManager(this.requireContext()));
         recyclerView.setAdapter(productAdapter);
-        RetrofitClient retroFitClient = /*new RetrofitClient(this)*/RetrofitClient.getInstance(this);
-        retroFitClient.startCall();
+        presenter.getProducts();
     }
 
 
@@ -78,14 +76,13 @@ public class ProductListFragment extends Fragment implements ProductView, OnProd
 
     @Override
     public void onClick(Product product) {
-        repository.addProduct(product);
-//        addToFavorites(product);
+        addProduct(product);
         Toast.makeText(this.requireContext(), product.getTitle() + "\nadded to favs", Toast.LENGTH_SHORT).show();
     }
 
-
     @Override
-    public void addToFavorites(Product product) {
-        repository.addProduct(product);
+    public void addProduct(Product product) {
+        presenter.addToFavorites(product);
     }
+
 }

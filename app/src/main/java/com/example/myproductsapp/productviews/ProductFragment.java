@@ -1,13 +1,15 @@
-package com.example.myproductsapp;
+package com.example.myproductsapp.productviews;
 
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,14 +17,19 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.myproductsapp.localdb.Product;
+import com.example.myproductsapp.R;
+import com.example.myproductsapp.localdb.LocalSource;
+import com.example.myproductsapp.model.Product;
+import com.example.myproductsapp.model.Repository;
 import com.example.myproductsapp.network.RetrofitClient;
+import com.example.myproductsapp.presenter.Presenter;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 
-public class ProductFragment extends Fragment implements ProductView {
-
+public class ProductFragment extends Fragment implements ProductViewInterface, OnProductClickListener {
+    Presenter presenter;
+    Button addToFavs;
     private int productId;
     private Product product;
     private TextView titleText;
@@ -41,7 +48,7 @@ public class ProductFragment extends Fragment implements ProductView {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (savedInstanceState == null) {
-            productId = ((ProductActivity) getActivity()).getProductID();
+            productId = ((ProductActivity) requireActivity()).getProductID();
         } else {
             productId = savedInstanceState.getInt("id");
         }
@@ -60,8 +67,9 @@ public class ProductFragment extends Fragment implements ProductView {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getUiRefs(view);
-        RetrofitClient retrofitClient = /*new RetrofitClient(this)*/RetrofitClient.getInstance(this);
-        retrofitClient.startCall(productId);
+        presenter = new Presenter(this, Repository.getInstance(RetrofitClient.getInstance(), LocalSource.getInstance(this.getContext())));
+        presenter.getProduct(productId);
+        addToFavs.setOnClickListener(v -> onClick(product) );
     }
 
     @Override
@@ -78,14 +86,16 @@ public class ProductFragment extends Fragment implements ProductView {
     }
 
     @Override
+    public void addProduct(Product product) {
+        presenter.addToFavorites(product);
+    }
+
+    @Override
     public void showError(String msg) {
         Snackbar.make(rcView,msg,Snackbar.LENGTH_SHORT).show();
     }
 
-    @Override
-    public void addToFavorites(Product product) {
 
-    }
 
     private void updateUI(){
         titleText.setText(product.getTitle());
@@ -96,6 +106,7 @@ public class ProductFragment extends Fragment implements ProductView {
         Glide.with(this).load(product.getThumbnail()).into(thumbImg);
     }
     private void getUiRefs(View view){
+        addToFavs = view.findViewById(R.id.addButton);
         titleText = view.findViewById(R.id.textTitle);
         brandText= view.findViewById(R.id.brandText);
         priceText=view.findViewById(R.id.priceText);
@@ -103,5 +114,11 @@ public class ProductFragment extends Fragment implements ProductView {
         ratingBar =view.findViewById(R.id.frg_ratingBar);
         thumbImg=view.findViewById(R.id.img_Thumbnail);
         rcView = view.findViewById(R.id.rc_view);
+    }
+
+    @Override
+    public void onClick(Product product) {
+        addProduct(product);
+        Toast.makeText(this.requireContext(), product.getTitle() + "\nadded to favs", Toast.LENGTH_SHORT).show();
     }
 }

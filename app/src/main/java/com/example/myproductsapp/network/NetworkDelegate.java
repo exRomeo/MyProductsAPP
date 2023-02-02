@@ -1,6 +1,6 @@
-package com.example.myproductsapp;
+package com.example.myproductsapp.network;
 
-import com.example.myproductsapp.localdb.Product;
+import com.example.myproductsapp.model.Product;
 
 import java.util.List;
 

@@ -4,30 +4,28 @@ import android.content.Context;
 
 import androidx.lifecycle.LiveData;
 
-import com.example.myproductsapp.Repository;
+import com.example.myproductsapp.model.Product;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class LocalProducts implements Repository {
-    private static LocalProducts productsRepo;
+ public class LocalSource implements LocalSourceInterface {
+    private static LocalSourceInterface localSource;
     private final ProductDAO productDAO;
     private final LiveData<List<Product>> storedProducts;
-    private List<Product> products;
-
     Context context;
 
-    private LocalProducts(Context context) {
+    private LocalSource(Context context) {
         this.context = context;
         ProductsDatabase pDB = ProductsDatabase.getInstance(context);
         productDAO = pDB.productDAO();
         storedProducts = productDAO.getAllProducts();
     }
 
-    public static LocalProducts getInstance(Context context) {
-        if (productsRepo == null) productsRepo = new LocalProducts(context);
-        return productsRepo;
+    public static LocalSourceInterface getInstance(Context context) {
+        if (localSource == null) localSource = new LocalSource(context);
+        return localSource;
     }
 
     @Override
@@ -37,12 +35,7 @@ public class LocalProducts implements Repository {
 
     @Override
     public void setProducts(ArrayList<Product> products) {
-        this.products = products;
-    }
 
-    @Override
-    public List<Product> getAllProducts() {
-        return products;
     }
 
     @Override

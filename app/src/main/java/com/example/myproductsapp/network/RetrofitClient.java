@@ -2,8 +2,8 @@ package com.example.myproductsapp.network;
 
 import androidx.annotation.NonNull;
 
-import com.example.myproductsapp.ProductView;
-import com.example.myproductsapp.localdb.Product;
+import com.example.myproductsapp.model.Product;
+import com.example.myproductsapp.model.ProductModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,31 +14,32 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class RetrofitClient {
+public class RetrofitClient implements ClientInterface{
 
     private static RetrofitClient retrofitClient;
     List<Product> listOfOne;
     private List<Product> productsList;
-    private ServerCalls serverCalls;
-    private ProductView productView;
+    private final ServerCalls serverCalls;
 
-    private RetrofitClient(ProductView productView) {
+
+    private RetrofitClient() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(ServerCalls.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         serverCalls = retrofit.create(ServerCalls.class);
-        this.productView = productView;
+
     }
 
-    public static synchronized RetrofitClient getInstance(ProductView productView) {
+    public static synchronized RetrofitClient getInstance() {
         if (retrofitClient == null)
-            retrofitClient = new RetrofitClient(productView);
+            retrofitClient = new RetrofitClient();
+
         return retrofitClient;
     }
 
 
-    public void startCall() {
+    public void fetchProducts(NetworkDelegate networkDelegate) {
 
         Call<ProductModel> products = serverCalls.getAllProducts();
         Callback<ProductModel> mProducts = new Callback<>() {
@@ -46,20 +47,20 @@ public class RetrofitClient {
             public void onResponse(@NonNull Call<ProductModel> call, Response<ProductModel> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     productsList = response.body().getProducts();
-                    productView.showProducts(productsList);
+                    networkDelegate.onResponseSuccess(productsList);
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<ProductModel> call, Throwable e) {
                 e.printStackTrace();
-                productView.showError(e.getMessage());
+                networkDelegate.onResponseFailure(e.getMessage());
             }
         };
         products.enqueue(mProducts);
     }
 
-    public void startCall(int id) {
+    public void fetchProduct(NetworkDelegate networkDelegate,int id) {
         Call<Product> product = serverCalls.getProduct(id);
         Callback<Product> mProduct = new Callback<>() {
             @Override
@@ -67,14 +68,14 @@ public class RetrofitClient {
                 if (response.isSuccessful() && response.body() != null) {
                     listOfOne = new ArrayList<>();
                     listOfOne.add(response.body());
-                    productView.showProducts(listOfOne);
+                    networkDelegate.onResponseSuccess(listOfOne);
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<Product> call, Throwable e) {
                 e.printStackTrace();
-                productView.showError(e.getMessage());
+                networkDelegate.onResponseFailure(e.getMessage());
             }
         };
         product.enqueue(mProduct);
