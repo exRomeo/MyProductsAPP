@@ -24,7 +24,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     private final Context context;
     private List<Product> products;
     private final OnProductClickListener onProductClickListener;
-    Drawable icon;
+    private final Drawable icon;
 
     public ProductAdapter(Context context, List<Product> products, OnProductClickListener onProductClickListener, Drawable icon) {
         this.context = context;
@@ -50,6 +50,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         holder.getPrice().setText(currentProduct.getTextPrice());
         holder.getRatingBar().setRating(currentProduct.getRating());
         Glide.with(context).load(currentProduct.getThumbnail()).into(holder.getImg());
+
         holder.getCardView().setOnClickListener(view1 -> {
             Intent toProduct = new Intent(context, ProductActivity.class);
             toProduct.putExtra("dest",3);

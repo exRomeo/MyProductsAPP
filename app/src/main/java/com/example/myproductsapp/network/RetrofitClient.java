@@ -17,7 +17,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitClient implements ClientInterface{
 
     private static RetrofitClient retrofitClient;
-    List<Product> listOfOne;
+    private List<Product> listOfOne;
     private List<Product> productsList;
     private final ServerCalls serverCalls;
 
