@@ -13,34 +13,42 @@ import com.example.myproductsapp.R;
 public class ProductActivity extends AppCompatActivity {
     private int productID;
     private int dest;
+    ProductListFragment productListFragment;
+    FavoritesFragment favoritesFragment;
+    ProductFragment productFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product);
         Intent inComing = getIntent();
+
         if (inComing != null) {
             dest = inComing.getIntExtra("dest", 0);
             productID = inComing.getIntExtra("product", 0);
         }
+
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        switch (dest) {
-            case 1:
-                ProductListFragment productListFragment = new ProductListFragment();
-                fragmentTransaction.add(R.id.fragmentContainerView, productListFragment, "list");
-                break;
-            case 2:
-                FavoritesFragment favoritesFragment = new FavoritesFragment();
-                fragmentTransaction.add(R.id.fragmentContainerView, favoritesFragment, "favorites");
-                break;
-            case 3:
-                ProductFragment productFragment = new ProductFragment();
-                fragmentTransaction.add(R.id.fragmentContainerView, productFragment, "product");
-                break;
-            default:
-                finish();
-                break;
+
+        if (savedInstanceState == null) {
+            switch (dest) {
+                case 1:
+                    productListFragment = new ProductListFragment();
+                    fragmentTransaction.add(R.id.fragmentContainerView, productListFragment, "list");
+                    break;
+                case 2:
+                    favoritesFragment = new FavoritesFragment();
+                    fragmentTransaction.add(R.id.fragmentContainerView, favoritesFragment, "favorites");
+                    break;
+                case 3:
+                    productFragment = new ProductFragment();
+                    fragmentTransaction.add(R.id.fragmentContainerView, productFragment, "product");
+                    break;
+                default:
+                    finish();
+                    break;
+            }
         }
 
         fragmentTransaction.commit();
@@ -54,6 +62,5 @@ public class ProductActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-
     }
 }
