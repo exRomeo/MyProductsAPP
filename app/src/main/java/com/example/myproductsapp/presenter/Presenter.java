@@ -7,7 +7,9 @@ import com.example.myproductsapp.model.Product;
 import com.example.myproductsapp.network.NetworkDelegate;
 import com.example.myproductsapp.model.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
+import io.reactivex.rxjava3.core.Flowable;
 
 public class Presenter implements PresenterInterface, NetworkDelegate {
     private final ProductViewInterface productView;
@@ -27,7 +29,7 @@ public class Presenter implements PresenterInterface, NetworkDelegate {
     public void getProduct(int id) {
         repository.getProduct(this, id);
     }
-    public LiveData<List<Product>> getFavorites(){
+    public Flowable<List<Product>> getFavorites(){
         return repository.getProducts();
     }
 
@@ -43,6 +45,13 @@ public class Presenter implements PresenterInterface, NetworkDelegate {
 
     @Override
     public void onResponseSuccess(List<Product> products) {
+        productView.showProducts(products);
+    }
+
+    @Override
+    public void onResponseSuccess(Product product) {
+        List<Product> products = new ArrayList<>();
+        products.add(product);
         productView.showProducts(products);
     }
 

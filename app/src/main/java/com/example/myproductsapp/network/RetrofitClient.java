@@ -8,16 +8,20 @@ import com.example.myproductsapp.model.ProductModel;
 import java.util.ArrayList;
 import java.util.List;
 
+import hu.akarnokd.rxjava3.retrofit.RxJava3CallAdapterFactory;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class RetrofitClient implements ClientInterface{
+public class RetrofitClient implements ClientInterface {
 
     private static RetrofitClient retrofitClient;
-    List<Product> listOfOne;
     private List<Product> productsList;
     private final ServerCalls serverCalls;
 
@@ -26,6 +30,7 @@ public class RetrofitClient implements ClientInterface{
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(ServerCalls.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
                 .build();
         serverCalls = retrofit.create(ServerCalls.class);
 
@@ -40,45 +45,22 @@ public class RetrofitClient implements ClientInterface{
 
 
     public void fetchProducts(NetworkDelegate networkDelegate) {
+        Observable<ProductModel> productsObs = serverCalls.getAllProducts();
+        Disposable d = productsObs.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .retry(10)
+                .subscribe(item -> networkDelegate.onResponseSuccess(item.getProducts()),
+                        throwable -> networkDelegate.onResponseFailure(throwable.getMessage()));
 
-        Call<ProductModel> products = serverCalls.getAllProducts();
-        Callback<ProductModel> mProducts = new Callback<>() {
-            @Override
-            public void onResponse(@NonNull Call<ProductModel> call, Response<ProductModel> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    productsList = response.body().getProducts();
-                    networkDelegate.onResponseSuccess(productsList);
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<ProductModel> call, Throwable e) {
-                e.printStackTrace();
-                networkDelegate.onResponseFailure(e.getMessage());
-            }
-        };
-        products.enqueue(mProducts);
     }
 
-    public void fetchProduct(NetworkDelegate networkDelegate,int id) {
-        Call<Product> product = serverCalls.getProduct(id);
-        Callback<Product> mProduct = new Callback<>() {
-            @Override
-            public void onResponse(@NonNull Call<Product> call, Response<Product> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    listOfOne = new ArrayList<>();
-                    listOfOne.add(response.body());
-                    networkDelegate.onResponseSuccess(listOfOne);
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<Product> call, Throwable e) {
-                e.printStackTrace();
-                networkDelegate.onResponseFailure(e.getMessage());
-            }
-        };
-        product.enqueue(mProduct);
+    public void fetchProduct(NetworkDelegate networkDelegate, int id) {
+        Observable<Product> productsObs = serverCalls.getProduct(id);
+        Disposable d = productsObs.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .retry(10)
+                .subscribe(item -> networkDelegate.onResponseSuccess(item),
+                        throwable -> networkDelegate.onResponseFailure(throwable.getMessage()));
     }
 
 

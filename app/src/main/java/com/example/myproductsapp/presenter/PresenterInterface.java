@@ -6,10 +6,12 @@ import com.example.myproductsapp.model.Product;
 
 import java.util.List;
 
+import io.reactivex.rxjava3.core.Flowable;
+
 public interface PresenterInterface {
     void getProducts();
     void getProduct(int id);
     void addToFavorites(Product product);
-    LiveData<List<Product>> getFavorites();
+    Flowable<List<Product>> getFavorites();
     void removeProduct(Product product);
 }

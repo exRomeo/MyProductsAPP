@@ -23,10 +23,16 @@ import com.example.myproductsapp.model.Repository;
 
 import java.util.ArrayList;
 
-public class FavoritesFragment extends Fragment implements OnProductClickListener{
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+
+
+public class FavoritesFragment extends Fragment implements OnProductClickListener {
     private ProductAdapter productAdapter;
 
     PresenterInterface presenter;
+
     public FavoritesFragment() {
         // Required empty public constructor
     }
@@ -48,16 +54,18 @@ public class FavoritesFragment extends Fragment implements OnProductClickListene
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         RecyclerView recyclerView = view.findViewById(R.id.favsList);
-        productAdapter = new ProductAdapter(this.getContext(),new ArrayList<>(),this, ContextCompat.getDrawable(this.requireContext(),R.drawable.baseline_delete_forever_24));
+        productAdapter = new ProductAdapter(this.getContext(), new ArrayList<>(), this, ContextCompat.getDrawable(this.requireContext(), R.drawable.baseline_delete_forever_24));
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this.getContext());
         presenter = new Presenter(null, Repository.getInstance(RetrofitClient.getInstance(), LocalSource.getInstance(this.requireContext())));
 
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(productAdapter);
-        presenter.getFavorites().observe(this.requireActivity(), products -> {
-            productAdapter.setProducts(products);
+
+        Disposable d = presenter.getFavorites().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(item -> {
+            productAdapter.setProducts(item);
             productAdapter.notifyDataSetChanged();
         });
+
     }
 
     @Override

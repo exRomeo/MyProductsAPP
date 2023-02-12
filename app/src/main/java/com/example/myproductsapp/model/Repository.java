@@ -9,6 +9,7 @@ import com.example.myproductsapp.network.RetrofitClient;
 
 import java.util.ArrayList;
 import java.util.List;
+import io.reactivex.rxjava3.core.Flowable;
 
 public class Repository implements RepositoryInterface {
     ClientInterface remoteSource;
@@ -30,7 +31,7 @@ public class Repository implements RepositoryInterface {
     }
 
     @Override
-    public LiveData<List<Product>> getProducts() {
+    public Flowable<List<Product>> getProducts() {
         return localSource.getProducts();
     }
 

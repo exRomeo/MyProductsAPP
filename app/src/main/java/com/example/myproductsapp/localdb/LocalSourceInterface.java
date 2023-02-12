@@ -6,9 +6,10 @@ import com.example.myproductsapp.model.Product;
 
 import java.util.ArrayList;
 import java.util.List;
+import io.reactivex.rxjava3.core.Flowable;
 
 public interface LocalSourceInterface {
-    LiveData<List<Product>> getProducts();
+    Flowable<List<Product>> getProducts();
 
     void setProducts(ArrayList<Product> products);
 

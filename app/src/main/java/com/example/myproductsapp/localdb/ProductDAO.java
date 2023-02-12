@@ -11,10 +11,12 @@ import com.example.myproductsapp.model.Product;
 
 import java.util.List;
 
+import io.reactivex.rxjava3.core.Flowable;
+
 @Dao
 public interface ProductDAO {
     @Query("SELECT * FROM products")
-    LiveData<List<Product>> getAllProducts();
+    Flowable<List<Product>> getAllProducts();
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insertProduct(Product product);

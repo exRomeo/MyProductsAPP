@@ -9,11 +9,13 @@ import com.example.myproductsapp.model.Product;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.rxjava3.core.Flowable;
 
- public class LocalSource implements LocalSourceInterface {
+
+public class LocalSource implements LocalSourceInterface {
     private static LocalSourceInterface localSource;
     private final ProductDAO productDAO;
-    private final LiveData<List<Product>> storedProducts;
+    private final Flowable<List<Product>> storedProducts;
     Context context;
 
     private LocalSource(Context context) {
@@ -29,7 +31,7 @@ import java.util.List;
     }
 
     @Override
-    public LiveData<List<Product>> getProducts() {
+    public Flowable<List<Product>> getProducts() {
         return storedProducts;
     }
 

@@ -7,8 +7,10 @@ import com.example.myproductsapp.network.NetworkDelegate;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.rxjava3.core.Flowable;
+
 public interface RepositoryInterface {
-    LiveData<List<Product>> getProducts();
+    Flowable<List<Product>> getProducts();
      void getProduct(NetworkDelegate networkDelegate, int id);
 
     void setProducts(ArrayList<Product> products);
