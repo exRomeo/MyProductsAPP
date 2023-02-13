@@ -1,9 +1,12 @@
 package com.example.myproductsapp.productviews;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -22,8 +25,10 @@ import com.example.myproductsapp.network.RetrofitClient;
 import com.example.myproductsapp.model.Repository;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
@@ -66,12 +71,41 @@ public class FavoritesFragment extends Fragment implements OnProductClickListene
             productAdapter.notifyDataSetChanged();
         });
 
+        EditText searchBar = view.findViewById(R.id.search_bar);
+        TextWatcher textWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                Disposable disposable = presenter.getFavorites()
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .flatMap(products -> Flowable.fromIterable(products)
+                                .filter(product -> product.getTitle().toLowerCase()
+                                        .contains(s.toString().toLowerCase()))
+                                .toList().toFlowable())
+                        .subscribe(items -> {
+                            productAdapter.setProducts(items);
+                            productAdapter.notifyDataSetChanged();
+                        });
+            }
+        };
+        searchBar.addTextChangedListener(textWatcher);
+
     }
 
     @Override
     public void onClick(Product product) {
         presenter.removeProduct(product);
         productAdapter.notifyDataSetChanged();
-        Toast.makeText(this.getContext(), "Rmoved\n" + product.getTitle(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this.getContext(), "Removed\n" + product.getTitle(), Toast.LENGTH_SHORT).show();
     }
 }
