@@ -23,7 +23,7 @@
         android:id="@+id/favsButton"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
-        android:text="@string/favsButton"
+        android:text="@string/favoritesButton"
         app:layout_constraintBottom_toTopOf="@+id/exitButton"
         app:layout_constraintEnd_toEndOf="@+id/listButton"
         app:layout_constraintStart_toStartOf="@+id/listButton"

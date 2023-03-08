@@ -39,6 +39,7 @@ public class ProductFragment extends Fragment implements ProductViewInterface, O
     private RatingBar ratingBar;
     private ImageView thumbImg;
     private RecyclerView rcView;
+
     public ProductFragment() {
         // Required empty public constructor
     }
@@ -69,7 +70,7 @@ public class ProductFragment extends Fragment implements ProductViewInterface, O
         getUiRefs(view);
         presenter = new Presenter(this, Repository.getInstance(RetrofitClient.getInstance(), LocalSource.getInstance(this.getContext())));
         presenter.getProduct(productId);
-        addToFavs.setOnClickListener(v -> onClick(product) );
+        addToFavs.setOnClickListener(v -> onClick(product));
     }
 
     @Override
@@ -92,12 +93,11 @@ public class ProductFragment extends Fragment implements ProductViewInterface, O
 
     @Override
     public void showError(String msg) {
-        Snackbar.make(rcView,msg,Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(rcView, msg, Snackbar.LENGTH_SHORT).show();
     }
 
 
-
-    private void updateUI(){
+    private void updateUI() {
         titleText.setText(product.getTitle());
         brandText.setText(product.getBrand());
         priceText.setText(product.getTextPrice());
@@ -105,14 +105,15 @@ public class ProductFragment extends Fragment implements ProductViewInterface, O
         ratingBar.setRating(product.getRating());
         Glide.with(this).load(product.getThumbnail()).into(thumbImg);
     }
-    private void getUiRefs(View view){
+
+    private void getUiRefs(View view) {
         addToFavs = view.findViewById(R.id.addButton);
         titleText = view.findViewById(R.id.textTitle);
-        brandText= view.findViewById(R.id.brandText);
-        priceText=view.findViewById(R.id.priceText);
-        descText =view.findViewById(R.id.textDesc);
-        ratingBar =view.findViewById(R.id.frg_ratingBar);
-        thumbImg=view.findViewById(R.id.img_Thumbnail);
+        brandText = view.findViewById(R.id.brandText);
+        priceText = view.findViewById(R.id.priceText);
+        descText = view.findViewById(R.id.textDesc);
+        ratingBar = view.findViewById(R.id.frg_ratingBar);
+        thumbImg = view.findViewById(R.id.img_Thumbnail);
         rcView = view.findViewById(R.id.rc_view);
     }
 

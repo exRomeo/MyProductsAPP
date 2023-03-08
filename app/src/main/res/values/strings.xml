@@ -3,7 +3,7 @@
     <string name="product_name">Product Name</string>
     <string name="image_desc">Product Image</string>
     <string name="listButton">Product List</string>
-    <string name="favsButton">Favorites</string>
+    <string name="favoritesButton">Favorites</string>
     <string name="exitButton">Exit</string>
     <string name="img_desc">Product Image</string>
     <string name="description">Description</string>
@@ -11,5 +11,5 @@
     <string name="price_holder">Price</string>
     <string name="brand_holder">Brand</string>
     <string name="addButton">Add</string>
-    <string name="search">Search...</string>
+    <string name="search">Search…</string>
 </resources>

@@ -1,11 +1,8 @@
 package com.example.myproductsapp.network;
 
-import androidx.annotation.NonNull;
-
 import com.example.myproductsapp.model.Product;
 import com.example.myproductsapp.model.ProductModel;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import hu.akarnokd.rxjava3.retrofit.RxJava3CallAdapterFactory;
@@ -13,9 +10,6 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -62,6 +56,5 @@ public class RetrofitClient implements ClientInterface {
                 .subscribe(item -> networkDelegate.onResponseSuccess(item),
                         throwable -> networkDelegate.onResponseFailure(throwable.getMessage()));
     }
-
 
 }
